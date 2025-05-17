@@ -54,7 +54,7 @@
     #certificate-container {
       position: relative;
       display: inline-block;
-      width: 70%; /* Reduced from 100% to 70% */
+      width: 70%;
     }
 
     #certificate {
@@ -67,12 +67,16 @@
       top: 43.2%;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 36px;
+      font-size: 15px;
+      height: 15px;
       color: #fffc00;
       font-weight: normal;
       white-space: nowrap;
       text-transform: uppercase;
       font-family: Arial, sans-serif;
+      max-width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   </style>
 </head>
