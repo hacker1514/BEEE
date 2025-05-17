@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BEEE Quiz</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: black;
+      color: white;
+      text-align: center;
+    }
+
+    .center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .cyan {
+      color: cyan;
+      font-size: 2em;
+    }
+
+    .green-button {
+      background-color: green;
+      color: red;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1.2em;
+      cursor: pointer;
+      margin-top: 30px;
+      border-radius: 8px;
+      transition: 0.3s ease;
+    }
+
+    .green-button:hover {
+      opacity: 0.8;
+    }
+
+    .quiz-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .question {
+      color: red;
+      font-size: 1.5em;
+      margin-bottom: 30px;
+    }
+
+    .option-button {
+      display: block;
+      margin: 15px auto;
+      padding: 12px 20px;
+      font-size: 1.1em;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      background-color: cyan;
+      color: black;
+      font-weight: bold;
+      width: 70%;
+      max-width: 400px;
+      transition: background-color 0.2s;
+    }
+
+    .option-button.selected {
+      background-color: yellow;
+      color: black;
+    }
+
+    #result {
+      display: none;
+      font-size: 2em;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+<audio id="clickSound" src="https://github.com/Niranjan164/COMPILER/raw/main/click-151673_073339.mp3"></audio>
+
+<!-- Welcome Page -->
+<div id="welcome" class="center">
+  <div class="cyan">WELCOME TO NIRANJAN</div>
+  <div class="cyan">CREATIONS</div>
+  <button class="green-button" onclick="startQuiz()">BEGIN QUIZ</button>
+</div>
+
+<!-- Quiz Page -->
+<div id="quiz" class="quiz-container"></div>
+
+<!-- Result Page -->
+<div id="result" class="center"></div>
+
+<script>
+const clickSound = document.getElementById("clickSound");
+
+function playClick() {
+  clickSound.currentTime = 0;
+  clickSound.play();
+}
+
+const questions = [
+  {
+    question: "What is a Wheatstone Bridge used to measure?",
+    options: ["Voltage", "Current", "Resistance", "Power"],
+    correct: 2
+  },
+  {
+    question: "Who invented the Wheatstone Bridge?",
+    options: ["James Watt", "Charles Wheatstone", "Ohm", "Faraday"],
+    correct: 1
+  },
+  {
+    question: "In a balanced Wheatstone Bridge, what is the voltage between midpoints?",
+    options: ["Zero", "5V", "10V", "Depends on supply"],
+    correct: 0
+  },
+  {
+    question: "Which of these is not required in a Wheatstone Bridge?",
+    options: ["Four resistors", "A galvanometer", "Battery", "Transformer"],
+    correct: 3
+  },
+  {
+    question: "What condition balances a Wheatstone Bridge?",
+    options: ["R1/R2 = R3/R4", "R1+R2=R3+R4", "R1R2=R3R4", "R1=R2"],
+    correct: 0
+  },
+  {
+    question: "What is measured at the galvanometer?",
+    options: ["Current", "Voltage", "Power", "No value"],
+    correct: 0
+  },
+  {
+    question: "Which is true in a balanced bridge?",
+    options: ["Current flows through galvanometer", "No current in galvanometer", "Galvanometer burns", "Resistance infinite"],
+    correct: 1
+  },
+  {
+    question: "Unit of resistance?",
+    options: ["Ampere", "Volt", "Ohm", "Watt"],
+    correct: 2
+  },
+  {
+    question: "If R1 = R2 and R3 = R4 then bridge is?",
+    options: ["Unbalanced", "Open", "Short", "Balanced"],
+    correct: 3
+  },
+  {
+    question: "Which instrument detects balance?",
+    options: ["Multimeter", "Galvanometer", "Voltmeter", "Ammeter"],
+    correct: 1
+  }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let selectedAnswers = [];
+
+function startQuiz() {
+  playClick();
+  document.getElementById("welcome").style.display = "none";
+  document.getElementById("quiz").style.display = "block";
+  showQuestion();
+}
+
+function showQuestion() {
+  const container = document.getElementById("quiz");
+  container.innerHTML = "";
+
+  const qObj = questions[currentQuestion];
+
+  const qDiv = document.createElement("div");
+  qDiv.className = "question";
+  qDiv.textContent = qObj.question;
+  container.appendChild(qDiv);
+
+  qObj.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "option-button";
+    btn.textContent = opt;
+    btn.onclick = function () {
+      playClick();
+      const allBtns = document.querySelectorAll(".option-button");
+      allBtns.forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      selectedAnswers[currentQuestion] = i;
+    };
+    container.appendChild(btn);
+  });
+
+  const nextBtn = document.createElement("button");
+  nextBtn.className = "green-button";
+  nextBtn.textContent = currentQuestion < questions.length - 1 ? "NEXT" : "SUBMIT";
+  nextBtn.onclick = function () {
+    playClick();
+    if (selectedAnswers[currentQuestion] === questions[currentQuestion].correct) {
+      score++;
+    }
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+      showQuestion();
+    } else {
+      showResult();
+    }
+  };
+  container.appendChild(nextBtn);
+}
+
+function showResult() {
+  document.getElementById("quiz").style.display = "none";
+  const resultDiv = document.getElementById("result");
+  resultDiv.style.display = "block";
+  const percentage = Math.round((score / questions.length) * 100);
+  resultDiv.textContent = `You scored ${percentage}%`;
+  playClick();
+}
+</script>
+
+</body>
+</html>
