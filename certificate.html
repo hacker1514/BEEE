@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Certificate Generator</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      color: cyan;
+    }
+
+    #message {
+      display: none;
+      font-size: 20px;
+      font-weight: bold;
+      color: green;
+      padding-top: 20px;
+      text-transform: uppercase;
+    }
+
+    #inputSection {
+      padding-top: 15vh;
+    }
+
+    #username {
+      padding: 10px;
+      font-size: 36px;
+      width: 80%;
+      max-width: 500px;
+      text-transform: uppercase;
+    }
+
+    #startBtn {
+      margin-top: 20px;
+      padding: 12px 24px;
+      background-color: cyan;
+      color: red;
+      font-size: 18px;
+      border: none;
+      cursor: pointer;
+    }
+
+    #certificateSection {
+      display: none;
+      margin: 40px auto;
+      max-width: 1000px;
+    }
+
+    #certificate-container {
+      position: relative;
+      display: inline-block;
+      width: 70%; /* Reduced from 100% to 70% */
+    }
+
+    #certificate {
+      width: 100%;
+      height: auto;
+    }
+
+    #name-overlay {
+      position: absolute;
+      top: 43.2%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 36px;
+      color: #fffc00;
+      font-weight: normal;
+      white-space: nowrap;
+      text-transform: uppercase;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="message">COLLECT YOUR CERTIFICATE THROUGH SCREEN SHOT</div>
+
+  <div id="inputSection">
+    <h2>ENTER YOUR NAME FOR CERTIFICATE</h2>
+    <input type="text" id="username" placeholder="YOUR NAME" />
+    <br>
+    <button id="startBtn" onclick="generateCertificate()">GET CERTIFICATE</button>
+    <audio id="clickSound" src="https://github.com/Niranjan164/COMPILER/raw/main/click-151673_073339.mp3"></audio>
+  </div>
+
+  <div id="certificateSection">
+    <div id="certificate-container">
+      <img id="certificate" src="https://raw.githubusercontent.com/hacker1514/BEEE/main/certificate.png" alt="Certificate" />
+      <div id="name-overlay">K.NIRANJAN KUMAR</div>
+    </div>
+  </div>
+
+  <script>
+    function generateCertificate() {
+      const nameInput = document.getElementById("username");
+      const name = nameInput.value.trim().toUpperCase();
+      const overlay = document.getElementById("name-overlay");
+      const clickSound = document.getElementById("clickSound");
+
+      if (name.length === 0) {
+        alert("PLEASE ENTER YOUR NAME.");
+        return;
+      }
+
+      clickSound.play();
+      overlay.textContent = name;
+
+      document.getElementById("inputSection").style.display = "none";
+      document.getElementById("certificateSection").style.display = "block";
+      document.getElementById("message").style.display = "block";
+    }
+  </script>
+</body>
+</html>
