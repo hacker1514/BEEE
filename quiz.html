@@ -80,6 +80,20 @@
       font-size: 2em;
       color: green;
     }
+
+    .certificate-button {
+      margin-top: 30px;
+      background-color: cyan;
+      color: red;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1.3em;
+      border-radius: 10px;
+      cursor: pointer;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
   </style>
 </head>
 <body>
@@ -221,6 +235,17 @@ function showResult() {
   const percentage = Math.round((score / questions.length) * 100);
   resultDiv.textContent = `You scored ${percentage}%`;
   playClick();
+
+  if (percentage >= 50) {
+    const certBtn = document.createElement("button");
+    certBtn.className = "certificate-button";
+    certBtn.textContent = "CERTIFICATE";
+    certBtn.onclick = function () {
+      playClick();
+      window.open("https://raw.githack.com/hacker1514/BEEE/main/certificate.html", "_blank");
+    };
+    resultDiv.appendChild(certBtn);
+  }
 }
 </script>
 
