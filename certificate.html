@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Certificate Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
       margin: 0;
@@ -12,15 +14,6 @@
       font-family: Arial, sans-serif;
       text-align: center;
       color: cyan;
-    }
-
-    #message {
-      display: none;
-      font-size: 20px;
-      font-weight: bold;
-      color: green;
-      padding-top: 20px;
-      text-transform: uppercase;
     }
 
     #inputSection {
@@ -33,9 +26,17 @@
       width: 80%;
       max-width: 500px;
       text-transform: uppercase;
+      color: orange; /* Input text in orange */
+      background-color: black;
+      border: 2px solid cyan;
+      outline: none;
     }
 
-    #startBtn {
+    ::placeholder {
+      color: #888; /* Placeholder color */
+    }
+
+    #startBtn, #downloadBtn {
       margin-top: 20px;
       padding: 12px 24px;
       background-color: cyan;
@@ -82,8 +83,6 @@
 </head>
 <body>
 
-  <div id="message">COLLECT YOUR CERTIFICATE THROUGH SCREEN SHOT</div>
-
   <div id="inputSection">
     <h2>ENTER YOUR NAME FOR CERTIFICATE</h2>
     <input type="text" id="username" placeholder="YOUR NAME" />
@@ -94,29 +93,58 @@
 
   <div id="certificateSection">
     <div id="certificate-container">
-      <img id="certificate" src="https://raw.githubusercontent.com/hacker1514/BEEE/main/certificate.png" alt="Certificate" />
+      <img id="certificate" crossorigin="anonymous" src="https://raw.githubusercontent.com/hacker1514/BEEE/main/certificate.png" alt="Certificate" />
       <div id="name-overlay">K.NIRANJAN KUMAR</div>
     </div>
+    <button id="downloadBtn" onclick="downloadCertificate()">DOWNLOAD CERTIFICATE</button>
   </div>
 
   <script>
+    const clickSound = document.getElementById("clickSound");
+
+    function playSound() {
+      clickSound.currentTime = 0;
+      clickSound.play();
+    }
+
     function generateCertificate() {
       const nameInput = document.getElementById("username");
       const name = nameInput.value.trim().toUpperCase();
       const overlay = document.getElementById("name-overlay");
-      const clickSound = document.getElementById("clickSound");
 
       if (name.length === 0) {
         alert("PLEASE ENTER YOUR NAME.");
         return;
       }
 
-      clickSound.play();
+      playSound();
       overlay.textContent = name;
 
       document.getElementById("inputSection").style.display = "none";
       document.getElementById("certificateSection").style.display = "block";
-      document.getElementById("message").style.display = "block";
+    }
+
+    async function downloadCertificate() {
+      playSound();
+
+      const downloadBtn = document.getElementById("downloadBtn");
+      downloadBtn.style.display = "none"; // Hide before capture
+
+      const certificateElement = document.getElementById("certificate-container");
+      const canvas = await html2canvas(certificateElement, { scale: 3, useCORS: true });
+      const imgData = canvas.toDataURL('image/png');
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'px',
+        format: [canvas.width, canvas.height]
+      });
+
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+      pdf.save('certificate.pdf');
+
+      downloadBtn.style.display = "inline-block"; // Show again
     }
   </script>
 </body>
